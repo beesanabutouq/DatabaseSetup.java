@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/26"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="supermarket_db.ProductController"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <Label layoutX="20" layoutY="20" text="Product Name:" />
+    <TextField fx:id="txtName" layoutX="130" layoutY="16" prefWidth="200"/>
+
+    <Label layoutX="20" layoutY="60" text="Retail Price:" />
+    <TextField fx:id="txtPrice" layoutX="130" layoutY="56" prefWidth="200"/>
+
+    <Button fx:id="btnAdd"
+            layoutX="130"
+            layoutY="100"
+            text="Add Product"
+            onAction="#addProduct"/>
+
+    <TableView fx:id="productTable"
+               layoutX="20"
+               layoutY="150"
+               prefHeight="200"
+               prefWidth="560">
+
+        <columns>
+            <TableColumn fx:id="colName" text="Product Name" prefWidth="280"/>
+            <TableColumn fx:id="colPrice" text="Retail Price" prefWidth="280"/>
+        </columns>
+
+    </TableView>
+
+</AnchorPane>
