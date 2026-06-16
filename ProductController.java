@@ -1,110 +1,237 @@
 package supermarket_db;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import java.sql.Connection;
- 
+
 public class ProductController {
 
     @FXML
     private TextField txtName;
 
     @FXML
-    private TextField txtPrice;
+    private TextField txtBarcode;
+
+    @FXML
+    private TextField txtRetail;
+
+    @FXML
+    private TextField txtCost;
+
+    @FXML
+    private TextField txtCategory;
+    
+    @FXML
+    private TextField txtSearch;
 
     @FXML
     private TableView<Product> productTable;
 
     @FXML
-    private TableColumn<Product, String> colName;
+    private TableColumn<Product,String> colName;
 
     @FXML
-    private TableColumn<Product, Double> colPrice;
+    private TableColumn<Product,String> colBarcode;
 
-    private ObservableList<Product> productList =
+    @FXML
+    private TableColumn<Product,Double> colRetail;
+
+    @FXML
+    private TableColumn<Product,Double> colCost;
+
+    @FXML
+    private TableColumn<Product,Integer> colCategory;
+
+    private ObservableList<Product> list =
             FXCollections.observableArrayList();
+
+    private ProductDAO productDAO =
+            new ProductDAO();
 
     @FXML
     public void initialize() {
+
+        colName.setCellValueFactory(
+                d -> new SimpleStringProperty(
+                        d.getValue().getName()));
+
+        colBarcode.setCellValueFactory(
+                d -> new SimpleStringProperty(
+                        d.getValue().getBarcode()));
+
+        colRetail.setCellValueFactory(
+                d -> new SimpleObjectProperty<>(
+                        d.getValue().getRetailPrice()));
+
+        colCost.setCellValueFactory(
+                d -> new SimpleObjectProperty<>(
+                        d.getValue().getCostPrice()));
+
+        colCategory.setCellValueFactory(
+                d -> new SimpleObjectProperty<>(
+                        d.getValue().getCategoryId()));
+
         loadProducts();
+        
+        productTable.getSelectionModel()
+
+        .selectedItemProperty()
+
+        .addListener(
+
+        (obs, oldVal, newVal)->{
+
+        if(newVal != null)
+        {
+
+        txtName.setText(
+
+        newVal.getName());
+
+        txtBarcode.setText(
+
+        newVal.getBarcode());
+
+        txtRetail.setText(
+
+        String.valueOf(
+
+        newVal.getRetailPrice()));
+
+        txtCost.setText(
+
+        String.valueOf(newVal.getCostPrice()));
+
+        txtCategory.setText(
+
+        String.valueOf( newVal.getCategoryId()));
+
+        }
+
+        });
     }
 
     @FXML
     private void addProduct() {
 
         try {
-            String name = txtName.getText();
-            double price = Double.parseDouble(txtPrice.getText());
 
-            Connection conn = DBConnection.getConnection();
+            Product p =
+                    new Product(
+                            0,
+                            txtName.getText(),
+                            txtBarcode.getText(),
+                            Double.parseDouble(txtRetail.getText()),
+                            Double.parseDouble(txtCost.getText()),
+                            Integer.parseInt(txtCategory.getText())
+                    );
 
-            String sql =
-                    "INSERT INTO Products(product_name, retail_price) VALUES (?, ?)";
+            productDAO.addProduct(p);
 
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, name);
-            ps.setDouble(2, price);
+            loadProducts();
 
-            ps.executeUpdate();
-
-            conn.close();
-
-            txtName.clear();
-            txtPrice.clear();
-
-            loadProducts(); // refresh table
+            clearFields();
 
         } catch (Exception e) {
+
             e.printStackTrace();
         }
     }
 
+    @FXML
+    private void deleteProduct() {
+
+        Product selected =
+                productTable.getSelectionModel()
+                            .getSelectedItem();
+
+        if(selected == null)
+            return;
+
+        productDAO.deleteProduct(
+                selected.getId()
+        );
+
+        loadProducts();
+    }
+
     private void loadProducts() {
 
-        productList.clear();
+        list.clear();
 
-        try {
-            Connection conn = DBConnection.getConnection();
+        list.addAll(
+                productDAO.getAllProducts()
+        );
 
-            String sql = "SELECT product_name, retail_price FROM Products";
+        productTable.setItems(list);
+    }
+    
+    @FXML
 
-            ResultSet rs = conn.createStatement().executeQuery(sql);
+    private void searchProduct()
+    {
 
-            while (rs.next()) {
+        list.clear();
 
-                productList.add(
-                        new Product(
-                                0,
-                                rs.getString("product_name"),
-                                rs.getDouble("retail_price")
-                        )
-                );
-            }
+        list.addAll(
 
-            conn.close();
+                productDAO.searchProducts(
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+                        txtSearch.getText()
 
-        colName.setCellValueFactory(
-                data -> new javafx.beans.property.SimpleStringProperty(
-                        data.getValue().getProductName()
                 )
         );
 
-        colPrice.setCellValueFactory(
-                data -> new javafx.beans.property.SimpleObjectProperty<>(
-                        data.getValue().getRetailPrice()
-                )
+    }
+    
+    @FXML
+    private void updateProduct()
+    {
+        Product selected =
+
+                productTable
+
+                .getSelectionModel()
+
+                .getSelectedItem();
+
+        if(selected==null)
+
+            return;
+
+        Product p =
+
+                new Product(
+
+                selected.getId(),
+
+                txtName.getText(),
+
+                txtBarcode.getText(),
+
+                Double.parseDouble(txtRetail.getText()),
+
+                Double.parseDouble(txtCost.getText()),
+
+                Integer.parseInt(txtCategory.getText())
+
         );
 
-        productTable.setItems(productList);
+        productDAO.updateProduct(p);
+
+        loadProducts();
+
+        clearFields();
+    }
+
+    private void clearFields() {
+
+        txtName.clear();
+        txtBarcode.clear();
+        txtRetail.clear();
+        txtCost.clear();
+        txtCategory.clear();
     }
 }

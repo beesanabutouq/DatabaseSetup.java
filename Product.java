@@ -1,39 +1,35 @@
 package supermarket_db;
 
 public class Product {
-    private int productId;
-    private String productName;
+
+    private int id;
+    private String name;
+    private String barcode;
     private double retailPrice;
+    private double costPrice;
+    private int categoryId;
 
-    // Constructor
-    public Product(int productId, String productName, double retailPrice) {
-        this.productId = productId;
-        this.productName = productName;
+    public Product(int id, String name, String barcode,
+                   double retailPrice, double costPrice,
+                   int categoryId) {
+
+        this.id = id;
+        this.name = name;
+        this.barcode = barcode;
         this.retailPrice = retailPrice;
+        this.costPrice = costPrice;
+        this.categoryId = categoryId;
     }
 
-    // Getters and Setters
-    public int getProductId() {
-        return productId;
-    }
+    public int getId() { return id; }
 
-    public void setProductId(int productId) {
-        this.productId = productId;
-    }
+    public String getName() { return name; }
 
-    public String getProductName() {
-        return productName;
-    }
+    public String getBarcode() { return barcode; }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
+    public double getRetailPrice() { return retailPrice; }
 
-    public double getRetailPrice() {
-        return retailPrice;
-    }
+    public double getCostPrice() { return costPrice; }
 
-    public void setRetailPrice(double retailPrice) {
-        this.retailPrice = retailPrice;
-    }
+    public int getCategoryId() { return categoryId; }
 }
