@@ -11,7 +11,7 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
 
     	FXMLLoader loader =
-    		   new FXMLLoader(Main.class.getResource("Warehouse.fxml"));
+    		   new FXMLLoader(Main.class.getResource("Supplier.fxml"));
     			// new FXMLLoader(Main.class.getResource("Customer.fxml"));
         Scene scene = new Scene(loader.load());
 

@@ -172,7 +172,7 @@ public class WarehouseDAO {
     }
 
     // =========================
-    // GET BY ID (اختياري)
+    // GET BY ID 
     // =========================
     public static Warehouse getWarehouseById(int id) {
 

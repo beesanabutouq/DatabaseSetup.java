@@ -56,15 +56,17 @@ public class DatabaseSetup {
             	    "FOREIGN KEY (category_id) REFERENCES Categories(category_id)"+
             	    ");";
             
-              String createSupplier = 
-            		"CREATE TABLE IF NOT EXISTS Suppliers(" +
-            		"supplier_id INT PRIMARY KEY AUTO_INCREMENT," +
-            		"company_name VARCHAR(100)," +
-            		"contact_person VARCHAR(100)," +
-            		"supplier_phone_number VARCHAR(20)," +
-            		"supplier_email VARCHAR(100)," +
-            		"address VARCHAR(255)" +
-            		");";
+            String createSupplier =
+                    "CREATE TABLE IF NOT EXISTS Suppliers(" +
+                    "supplier_id INT PRIMARY KEY AUTO_INCREMENT," +
+                    "company_name VARCHAR(100) NOT NULL," +
+                    "contact_person VARCHAR(100) NOT NULL," +
+                    "supplier_phone_number VARCHAR(20) NOT NULL," +
+                    "supplier_email VARCHAR(100) UNIQUE," +
+                    "city VARCHAR(50)," +
+                    "street VARCHAR(100)," +
+                    "postal_code VARCHAR(20)" +
+                    ");";
               
               String createCustomer =
             	    "CREATE TABLE IF NOT EXISTS Customers (" +
@@ -238,9 +240,12 @@ public class DatabaseSetup {
             	    "('Ramallah Branch','Ramallah','Al-Manara Street','022123456')," +
             	    "('Nablus Branch','Nablus','Main Street','092123456');";
             String insertSupplier =
-            	    "INSERT INTO Suppliers(company_name, contact_person, supplier_phone_number, supplier_email, address) VALUES " +
-            	    "('Fresh Food Co','Ahmad Ali','0591111111','fresh@food.com','Ramallah')," +
-            	    "('Dairy Factory','Sami Hasan','0592222222','dairy@factory.com','Nablus');";
+                    "INSERT INTO Suppliers " +
+                    "(company_name, contact_person, supplier_phone_number, supplier_email, city, street, postal_code) VALUES " +
+
+                    "('Fresh Food Co', 'Ahmad Ali', '0591111111', 'fresh@food.com', 'Ramallah', 'Al-Irsal Street', '00970')," +
+
+                    "('Dairy Factory', 'Sami Hasan', '0592222222', 'dairy@factory.com', 'Nablus', 'Rafidia Street', '40001');";
             String insertEmployee =
             	    "INSERT INTO Employees(employee_name, position, salary, hire_date, manager_id) VALUES " +
             	    "('Mohammad Khaled','Manager',5000,'2024-01-10',NULL)," +
@@ -313,8 +318,12 @@ public class DatabaseSetup {
                 stmt.executeUpdate(insertCategory);
             }
             stmt.executeUpdate(insertBranch);
-            stmt.executeUpdate(insertSupplier);
+            ResultSet rs2 = stmt.executeQuery("SELECT COUNT(*) FROM suppliers");
+            rs2.next();
 
+            if (rs2.getInt(1) == 0) {
+                stmt.executeUpdate(insertSupplier);
+            }
             ResultSet rs1 = stmt.executeQuery("SELECT COUNT(*) FROM Employees");
             rs1.next();
 

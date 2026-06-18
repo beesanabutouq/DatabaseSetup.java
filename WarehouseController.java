@@ -77,7 +77,6 @@ public class WarehouseController {
 
         loadData();
 
-        // تعبئة الحقول عند اختيار صف
         tableWarehouse.getSelectionModel()
                 .selectedItemProperty()
                 .addListener((obs, oldSelection, selected) -> {

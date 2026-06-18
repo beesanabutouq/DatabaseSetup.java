@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="600.0" prefWidth="900.0"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="supermarket_db.SupplierController">
+
+    <!-- ================= INPUT SECTION ================= -->
+    <VBox spacing="10" layoutX="20" layoutY="20">
+
+        <TextField fx:id="txtSupplierId" promptText="Supplier ID (Auto / Disabled)" editable="false"/>
+
+        <TextField fx:id="txtCompanyName" promptText="Company Name"/>
+
+        <TextField fx:id="txtContactPerson" promptText="Contact Person"/>
+
+        <TextField fx:id="txtPhone" promptText="Phone Number"/>
+
+        <TextField fx:id="txtEmail" promptText="Email"/>
+
+        <TextField fx:id="txtCity" promptText="City"/>
+
+        <TextField fx:id="txtStreet" promptText="Street"/>
+
+        <TextField fx:id="txtPostalCode" promptText="Postal Code"/>
+
+        <!-- Buttons -->
+        <HBox spacing="10">
+
+            <Button text="Add" onAction="#addSupplier"/>
+
+            <Button text="Update" onAction="#updateSupplier"/>
+
+            <Button text="Delete" onAction="#deleteSupplier"/>
+
+            <Button text="Clear" onAction="#clearFields"/>
+
+        </HBox>
+
+    </VBox>
+
+
+    <!-- ================= TABLE SECTION ================= -->
+    <TableView fx:id="supplierTable"
+               layoutX="350" layoutY="20"
+               prefHeight="550" prefWidth="520">
+
+        <columns>
+
+            <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
+
+            <TableColumn fx:id="colCompany" text="Company" prefWidth="100"/>
+
+            <TableColumn fx:id="colContact" text="Contact" prefWidth="100"/>
+
+            <TableColumn fx:id="colPhone" text="Phone" prefWidth="100"/>
+
+            <TableColumn fx:id="colEmail" text="Email" prefWidth="120"/>
+
+            <TableColumn fx:id="colCity" text="City" prefWidth="80"/>
+
+            <TableColumn fx:id="colStreet" text="Street" prefWidth="100"/>
+
+            <TableColumn fx:id="colPostalCode" text="Postal Code" prefWidth="100"/>
+
+        </columns>
+
+    </TableView>
+
+</AnchorPane>
