@@ -6,36 +6,52 @@ import java.util.List;
 
 public class ProductDAO {
 
-    public void addProduct(Product p) {
+	public boolean addProduct(Product p) {
 
-        try {
+	    String name = p.getName().trim();
+	    String barcode = p.getBarcode().trim();
+	    double retail = p.getRetailPrice();
+	    double cost = p.getCostPrice();
+	    int categoryId = p.getCategoryId();
 
-            Connection conn =
-                    DBConnection.getConnection();
+	    String checkSql = "SELECT COUNT(*) FROM Products WHERE LOWER(barcode_number) = LOWER(?)";
+	    String insertSql =
+	            "INSERT INTO Products " +
+	            "(product_name, barcode_number, retail_price, cost_price, category_id) " +
+	            "VALUES (?, ?, ?, ?, ?)";
 
-            String sql =
-                    "INSERT INTO Products " +
-                    "(product_name, barcode_number, retail_price, cost_price, category_id) " +
-                    "VALUES (?, ?, ?, ?, ?)";
+	    try (Connection conn = DBConnection.getConnection();
+	         PreparedStatement checkPs = conn.prepareStatement(checkSql)) {
 
-            PreparedStatement ps =
-                    conn.prepareStatement(sql);
+	        checkPs.setString(1, barcode);
 
-            ps.setString(1, p.getName());
-            ps.setString(2, p.getBarcode());
-            ps.setDouble(3, p.getRetailPrice());
-            ps.setDouble(4, p.getCostPrice());
-            ps.setInt(5, p.getCategoryId());
+	        ResultSet rs = checkPs.executeQuery();
+	        rs.next();
 
-            ps.executeUpdate();
+	        if (rs.getInt(1) > 0) {
+	            System.out.println("Product already exists (barcode duplicate)");
+	            return false;
+	        }
 
-            conn.close();
+	        try (PreparedStatement ps = conn.prepareStatement(insertSql)) {
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+	            ps.setString(1, name);
+	            ps.setString(2, barcode);
+	            ps.setDouble(3, retail);
+	            ps.setDouble(4, cost);
+	            ps.setInt(5, categoryId);
 
+	            ps.executeUpdate();
+	        }
+
+	        System.out.println("Product Added Successfully");
+	        return true;
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
     public List<Product> getAllProducts() {
 
         List<Product> products =

@@ -10,44 +10,57 @@ import java.util.ArrayList;
 public class CustomerDAO {
 
     // Insert Customer
-    public void insertCustomer(Customer c) {
+	public boolean insertCustomer(Customer c) {
 
-        String sql =
-                "INSERT INTO Customers " +
-                "(customer_name, phone_number, customer_email, customer_address, registration_date) " +
-                "VALUES (?,?,?,?,?)";
+	    String sql =
+	            "INSERT INTO Customers " +
+	            "(customer_name, phone_number, customer_email, customer_address, registration_date) " +
+	            "VALUES (?,?,?,?,?)";
 
-        try {
+	    try {
+	        Connection con = DBConnection.getConnection();
 
-            Connection con = DBConnection.getConnection();
+	        // Normalize inputs (ONLY trim)
+	        String name = c.getCustomerName().trim();
+	        String phone = c.getPhoneNumber().trim();
+	        String email = c.getCustomerEmail().trim();
+	        String address = c.getCustomerAddress().trim();
 
-            PreparedStatement ps = con.prepareStatement(sql);
+	        // 1. check duplicate email (case-insensitive)
+	        String checkSql = "SELECT COUNT(*) FROM Customers WHERE LOWER(customer_email) = LOWER(?)";
+	        PreparedStatement checkPs = con.prepareStatement(checkSql);
+	        checkPs.setString(1, email);
 
-            ps.setString(1, c.getCustomerName());
+	        ResultSet rs = checkPs.executeQuery();
+	        rs.next();
 
-            ps.setString(2, c.getPhoneNumber());
+	        if (rs.getInt(1) > 0) {
+	            con.close();
+	            System.out.println("Customer already exists!");
+	            return false;
+	        }
 
-            ps.setString(3, c.getCustomerEmail());
+	        // 2. insert
+	        PreparedStatement ps = con.prepareStatement(sql);
 
-            ps.setString(4, c.getCustomerAddress());
+	        ps.setString(1, name);
+	        ps.setString(2, phone);
+	        ps.setString(3, email);
+	        ps.setString(4, address);
+	        ps.setDate(5, c.getRegistrationDate());
 
-            ps.setDate(5, c.getRegistrationDate());
+	        ps.executeUpdate();
 
-            ps.executeUpdate();
+	        con.close();
 
-            System.out.println("Customer Added Successfully");
+	        System.out.println("Customer Added Successfully");
+	        return true;
 
-        }
-
-        catch (SQLException e) {
-
-            e.printStackTrace();
-
-        }
-
-    }
-
-
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
     // Update Customer
     public void updateCustomer(Customer c) {
 

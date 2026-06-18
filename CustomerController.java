@@ -51,6 +51,21 @@ public class CustomerController {
     @FXML
     public void addCustomer() {
 
+        if(datePicker.getValue() == null){
+
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+
+            alert.setTitle("Warning");
+
+            alert.setHeaderText(null);
+
+            alert.setContentText("Please select registration date.");
+
+            alert.showAndWait();
+
+            return;
+        }
+
         Customer c = new Customer(
                 nameField.getText(),
                 phoneField.getText(),
@@ -60,10 +75,11 @@ public class CustomerController {
         );
 
         dao.insertCustomer(c);
+
         loadTable();
+
         clearFields();
     }
-
     // UPDATE
     @FXML
     public void updateCustomer() {

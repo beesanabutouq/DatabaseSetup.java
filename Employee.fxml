@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="500.0" prefWidth="700.0"
+	xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="supermarket_db.EmployeeController">
+
+	<Label layoutX="20" layoutY="20" text="Employee Name:" />
+	<TextField fx:id="txtName" layoutX="150" layoutY="16"
+		prefWidth="200" />
+
+	<Label layoutX="20" layoutY="60" text="Position:" />
+	<TextField fx:id="txtPosition" layoutX="150" layoutY="56"
+		prefWidth="200" />
+
+	<Label layoutX="20" layoutY="100" text="Salary:" />
+	<TextField fx:id="txtSalary" layoutX="150" layoutY="96"
+		prefWidth="200" />
+
+	<Label layoutX="20" layoutY="140" text="Hire Date:" />
+	<TextField fx:id="txtHireDate" layoutX="150" layoutY="136"
+		prefWidth="200" />
+
+	<Label layoutX="20" layoutY="180" text="Manager ID:" />
+	<TextField fx:id="txtManagerId" layoutX="150" layoutY="176"
+		prefWidth="200" />
+
+	<Button text="Add Employee" layoutX="150" layoutY="220"
+		onAction="#addEmployee" />
+
+	<Button text="Delete Employee" layoutX="270" layoutY="220"
+		onAction="#deleteEmployee" />
+
+	<Label layoutX="390" layoutY="20" text="Search:" />
+
+	<TextField fx:id="txtSearch" layoutX="440" layoutY="16"
+		prefWidth="140" />
+	<Button text="Search" layoutX="590" layoutY="16"
+		onAction="#searchEmployee" />
+	<Label layoutX="400" layoutY="90" text="Update Employee" />
+	<Button text="Update" layoutX="500" layoutY="85"
+		onAction="#updateEmployee" />
+	<TableView fx:id="employeeTable" layoutX="20" layoutY="270"
+		prefHeight="200" prefWidth="650">
+		<columns>
+			<TableColumn fx:id="colName" text="Name" prefWidth="150" />
+			<TableColumn fx:id="colPosition" text="Position"
+				prefWidth="120" />
+			<TableColumn fx:id="colSalary" text="Salary"
+				prefWidth="100" />
+			<TableColumn fx:id="colHireDate" text="Hire Date"
+				prefWidth="140" />
+			<TableColumn fx:id="colManagerId" text="Manager ID"
+				prefWidth="120" />
+		</columns>
+	</TableView>
+
+</AnchorPane>

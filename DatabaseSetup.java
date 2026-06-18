@@ -70,8 +70,8 @@ public class DatabaseSetup {
             	    "CREATE TABLE IF NOT EXISTS Customers (" +
             	    "customer_id INT PRIMARY KEY AUTO_INCREMENT," +
             	    "customer_name VARCHAR(100) NOT NULL," +
-            	    "phone_number VARCHAR(20)," +
-            	    "customer_email VARCHAR(100)," +
+            	    "phone_number VARCHAR(20) UNIQUE," +
+            	    "customer_email VARCHAR(100) UNIQUE," +
             	    "customer_address VARCHAR(255)," +
             	    "registration_date DATE" +
             	    ");";
@@ -106,17 +106,17 @@ public class DatabaseSetup {
 					"FOREIGN KEY (employee_id) REFERENCES Employees(employee_id)" +
 					");";
                 
-            String createWarehouse = 
-            		"CREATE TABLE IF NOT EXISTS Warehouses (" +
-            		"warehouse_id INT PRIMARY KEY AUTO_INCREMENT," +
-            		"location VARCHAR(255)," +
-            		"capacity INT," +
-            		"warehouse_email  VARCHAR(100)," +
-            		
-            		"manager_id INT," +
-            		"FOREIGN KEY (manager_id) REFERENCES Employees(employee_id)" +
-            		");";
-            
+                String createWarehouse =
+                        "CREATE TABLE IF NOT EXISTS Warehouses (" +
+                        "warehouse_id INT PRIMARY KEY AUTO_INCREMENT," +
+                        "city VARCHAR(100)," +
+                        "street VARCHAR(150)," +
+                        "postal_code INT," +
+                        "capacity INT," +
+                        "warehouse_email VARCHAR(100)," +
+                        "manager_id INT," +
+                        "UNIQUE (city, street, warehouse_email)" +
+                        ");";
             String createInventory = 
             		"CREATE TABLE IF NOT EXISTS Inventory("+
             		"inventory_id INT PRIMARY KEY AUTO_INCREMENT,"+
@@ -255,9 +255,10 @@ public class DatabaseSetup {
             	    "INSERT INTO ContractEmployees(employee_id, contract_salary, contract_end_date) VALUES " +
             	    "(1,5000,'2027-12-31');";
             String insertWarehouse =
-            	    "INSERT INTO Warehouses(location, capacity, warehouse_email, manager_id) VALUES " +
-            	    "('Ramallah Industrial Zone',5000,'warehouse1@market.com',1)," +
-            	    "('Nablus Industrial Area',3000,'warehouse2@market.com',1);";
+            	    "INSERT INTO Warehouses(city, street, postal_code, capacity, warehouse_email, manager_id)\r\n"
+            	    + "VALUES\r\n"
+            	    + "('Ramallah','Industrial Zone',12345,5000,'warehouse1@market.com',1),\r\n"
+            	    + "('Nablus','Main Area',54321,3000,'warehouse2@market.com',1);";
             String insertProduct =
             	    "INSERT INTO Products(product_name, barcode_number, retail_price, cost_price, category_id) VALUES " +
             	    "('Milk','10001',5.5,4.0,1)," +
@@ -304,14 +305,22 @@ public class DatabaseSetup {
             	    "(1,1,'Cash',15.5)," +
             	    "(2,1,'Credit Card',10.0);";
             
-            // Insert only if rows do not exist 
-            stmt.executeUpdate(insertCategory);
+            // Insert only if rows do not exist in category
+            ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM Categories");
+            rs.next();
+
+            if (rs.getInt(1) == 0) {
+                stmt.executeUpdate(insertCategory);
+            }
             stmt.executeUpdate(insertBranch);
             stmt.executeUpdate(insertSupplier);
 
-            stmt.executeUpdate(insertEmployee);
-            stmt.executeUpdate(insertHourlyEmployee);
-            stmt.executeUpdate(insertContractEmployee);
+            ResultSet rs1 = stmt.executeQuery("SELECT COUNT(*) FROM Employees");
+            rs1.next();
+
+            if (rs1.getInt(1) == 0) {
+                stmt.executeUpdate(insertEmployee);
+            }
 
             stmt.executeUpdate(insertWarehouse);
 

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.171"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="supermarket_db.WarehouseController">
+
+    <children>
+
+        <VBox spacing="10" layoutX="20" layoutY="20">
+
+            <!-- FORM -->
+            <GridPane hgap="10" vgap="10">
+
+                <Label text="City:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <TextField fx:id="txtCity" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                <Label text="Street:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <TextField fx:id="txtStreet" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                <Label text="Postal Code:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <TextField fx:id="txtPostalCode" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                <Label text="Capacity:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <TextField fx:id="txtCapacity" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                <Label text="Email:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                <TextField fx:id="txtEmail" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+            </GridPane>
+
+            <!-- BUTTONS -->
+            <HBox spacing="10">
+
+                <Button text="Add" onAction="#addWarehouse"/>
+                <Button text="Update" onAction="#updateWarehouse"/>
+                <Button text="Delete" onAction="#deleteWarehouse"/>
+
+            </HBox>
+
+            <!-- TABLE -->
+            <TableView fx:id="tableWarehouse" prefHeight="300" prefWidth="600">
+
+                <columns>
+
+                    <TableColumn fx:id="colId" text="ID"/>
+                    <TableColumn fx:id="colCity" text="City"/>
+                    <TableColumn fx:id="colStreet" text="Street"/>
+                    <TableColumn fx:id="colPostalCode" text="Postal Code"/>
+                    <TableColumn fx:id="colCapacity" text="Capacity"/>
+                    <TableColumn fx:id="colEmail" text="Email"/>
+
+                </columns>
+
+            </TableView>
+
+        </VBox>
+
+    </children>
+
+</AnchorPane>
